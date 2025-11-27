@@ -1,6 +1,6 @@
 {
   "name": "autotailor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "AI-powered automated CV tailoring and job application system using Claude API",
   "main": "dist/index.js",
   "bin": {
