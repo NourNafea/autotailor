@@ -2,7 +2,7 @@
 
 > Automatically tailor your CV to any job posting and send professional applications with AI
 
-AutoTailor uses Claude AI to analyze job posts, intelligently rewrite your LaTeX CV to match requirements, and generate personalized application emails - all through a simple, interactive command-line interface.
+AutoTailor uses AI (Claude, ChatGPT, or Gemini) to analyze job posts, intelligently rewrite your LaTeX CV to match requirements, and generate personalized application emails - all through a simple, interactive command-line interface.
 
 ## 🎯 What It Does
 
@@ -59,7 +59,10 @@ That's it! The CLI guides you through the entire process.
 
 - **Node.js** 16+ and npm
 - **LaTeX** compiler (pdflatex or latexmk)
-- **Claude API** key from Anthropic
+- **AI API key** - Choose one:
+  - Claude API (Anthropic) - Recommended
+  - OpenAI API (ChatGPT)
+  - Google Gemini API
 - **Email account** with SMTP access (Gmail recommended)
 
 ---
@@ -103,8 +106,17 @@ cp .env.example .env
 Edit `.env`:
 
 ```env
-# Claude API (get from console.anthropic.com)
-CLAUDE_API_KEY=sk-ant-api03-...
+# AI Provider (Choose ONE - Claude recommended)
+# Get Claude API key: https://console.anthropic.com/settings/keys
+CLAUDE_API_KEY=your_claude_api_key_here
+
+# OR use OpenAI (ChatGPT)
+# Get OpenAI API key: https://platform.openai.com/api-keys
+# OPENAI_API_KEY=your_openai_api_key_here
+
+# OR use Google Gemini
+# Get Gemini API key: https://makersuite.google.com/app/apikey
+# GEMINI_API_KEY=your_gemini_api_key_here
 
 # Email Settings (Gmail recommended)
 SMTP_EMAIL=your.email@gmail.com
@@ -112,6 +124,11 @@ SMTP_PASS=your_app_password
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 ```
+
+**Choose Your AI Provider:**
+- **Claude (Recommended)**: Best results, get key at [console.anthropic.com](https://console.anthropic.com/settings/keys)
+- **ChatGPT**: Use OpenAI API, get key at [platform.openai.com](https://platform.openai.com/api-keys)
+- **Gemini**: Use Google's AI, get key at [makersuite.google.com](https://makersuite.google.com/app/apikey)
 
 **Gmail Setup:**
 1. Enable 2-Factor Authentication
@@ -133,9 +150,13 @@ npm install -g autotailor
 # Create config directory
 mkdir -p ~/.autotailor
 
-# Create .env file
+# Create .env file (choose one AI provider)
 cat > ~/.autotailor/.env << EOF
-CLAUDE_API_KEY=your-api-key-here
+# Choose ONE AI provider:
+CLAUDE_API_KEY=your-claude-api-key-here
+# OPENAI_API_KEY=your-openai-api-key-here
+# GEMINI_API_KEY=your-gemini-api-key-here
+
 SMTP_EMAIL=your.email@gmail.com
 SMTP_PASS=your_app_password
 SMTP_HOST=smtp.gmail.com
@@ -218,6 +239,8 @@ $ npm run tailor
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
 
+🤖 Using: Claude (Anthropic) (claude-sonnet-4-20250514)
+
 ? Enter path to your CV (.tex file): ./uploads/CV.tex
 ? Your full name: John Doe
 
@@ -276,7 +299,7 @@ Files saved in: uploads/
 ## 🛠️ Tech Stack
 
 - **Node.js + TypeScript** - Runtime and type safety
-- **Claude API** - AI for analysis, tailoring, and generation
+- **AI Providers** - Claude API (Anthropic), OpenAI API (ChatGPT), or Google Gemini
 - **Inquirer** - Interactive CLI prompts
 - **Chalk** - Terminal colors
 - **Ora** - Loading spinners
@@ -316,10 +339,13 @@ Files saved in: uploads/
 - Enable 2FA first, then generate App Password
 - Check SMTP settings in .env
 
-### Claude API Errors
-- Verify API key is correct
-- Check account has credits
+### AI API Errors
+- **Claude**: Verify API key is correct at [console.anthropic.com](https://console.anthropic.com)
+- **OpenAI**: Check API key and credits at [platform.openai.com](https://platform.openai.com)
+- **Gemini**: Verify API key at [makersuite.google.com](https://makersuite.google.com)
+- Check account has credits/quota
 - Ensure no rate limiting
+- The CLI will show which AI provider it's using at startup
 
 ---
 

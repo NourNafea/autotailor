@@ -21,6 +21,7 @@ An AI-powered CLI that:
 ✅ Generates professional emails
 ✅ Sends applications
 
+Choose your AI: Claude, ChatGPT, or Gemini
 One command. Zero manual work.
 
 npm install -g autotailor
@@ -49,18 +50,19 @@ npm install -g autotailor
 ### Option 3: Technical
 
 ```
-Built a CLI tool with Claude AI that automates job applications:
+Built a CLI tool with AI that automates job applications:
 
 🔹 Job post analysis (skills, keywords, seniority)
 🔹 CV tailoring (LaTeX-safe)
 🔹 PDF compilation
 🔹 Email generation & sending
 
-Built with Node.js + TypeScript + Claude API
+Supports Claude, ChatGPT, or Gemini
+Built with Node.js + TypeScript
 
 Try it: npm install -g autotailor
 
-#TypeScript #ClaudeAI #CLI
+#TypeScript #AI #CLI #OpenAI #ClaudeAI #Gemini
 ```
 
 ---
@@ -75,12 +77,14 @@ Try it: npm install -g autotailor
 After countless hours of manually tailoring CVs for job applications, I decided to automate the process with AI.
 
 What is AutoTailor?
-AutoTailor is a command-line tool that uses Claude AI to:
+AutoTailor is a command-line tool that uses AI to:
 
 ✅ Analyze job postings and extract key requirements
 ✅ Automatically tailor your LaTeX CV to match the role
 ✅ Generate professional, personalized application emails
 ✅ Compile PDFs and send applications
+
+Choose your AI provider: Claude (Anthropic), ChatGPT (OpenAI), or Gemini (Google)
 
 The Problem:
 Job seekers spend hours customizing their CVs for each application. It's time-consuming, inconsistent, and exhausting.
@@ -90,7 +94,7 @@ One command. AI does the heavy lifting. You stay in control.
 
 Tech Stack:
 • Node.js + TypeScript
-• Claude AI (Anthropic)
+• Claude, ChatGPT, or Gemini (your choice!)
 • LaTeX for CV formatting
 • Interactive CLI with beautiful UX
 
@@ -120,7 +124,7 @@ Key Features:
 
 Technical Highlights:
 ✨ Interactive CLI with inquirer, chalk, and ora
-✨ Claude AI for natural language processing
+✨ Multi-AI provider support (Claude, ChatGPT, Gemini)
 ✨ LaTeX compilation pipeline
 ✨ SMTP integration for email delivery
 ✨ Multi-platform support
@@ -221,7 +225,7 @@ $ autotailor
 [TECH STACK - 2:00]
 "Built with:
 - Node.js and TypeScript
-- Claude AI for intelligence
+- Your choice of AI: Claude, ChatGPT, or Gemini
 - LaTeX for CV formatting
 - Beautiful CLI with colors and spinners"
 
@@ -259,7 +263,7 @@ What it does:
 
 Tech stack:
 • Node.js + TypeScript
-• Claude AI
+• Claude, ChatGPT, or Gemini
 • LaTeX
 • Beautiful CLI UX
 
@@ -319,13 +323,16 @@ Available now:
 
 ### Why AutoTailor Matters:
 - **Time Saver**: What took 30 minutes now takes 2 minutes
-- **AI-Powered**: Uses Claude AI for intelligent analysis
+- **AI-Powered**: Choose your AI - Claude, ChatGPT, or Gemini
 - **Professional**: Generates polished, personalized content
 - **Open Source**: Free to use and contribute
 - **Developer-Friendly**: CLI-first design
+- **Flexible**: Use the AI provider you already have access to
 
 ### Unique Features:
+- Multi-AI provider support (Claude, OpenAI, Gemini)
 - LaTeX-safe CV tailoring
+- Auto-detects which AI provider to use
 - Multi-location .env support
 - Beautiful interactive CLI
 - Email preview before sending
@@ -334,7 +341,8 @@ Available now:
 ### Technical Achievements:
 - Published to npm
 - Built with TypeScript
-- Integrated Claude AI
+- Integrated 3 AI providers (Claude, OpenAI, Gemini)
+- Provider abstraction pattern for AI services
 - Handles LaTeX compilation
 - SMTP email delivery
 

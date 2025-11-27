@@ -1,7 +1,7 @@
 {
   "name": "autotailor",
   "version": "1.1.0",
-  "description": "AI-powered automated CV tailoring and job application system using Claude API",
+  "description": "AI-powered automated CV tailoring and job application system. Supports Claude, ChatGPT, and Gemini.",
   "main": "dist/index.js",
   "bin": {
     "autotailor": "./dist/cli.js"
@@ -28,9 +28,15 @@
     "ai",
     "claude",
     "anthropic",
+    "openai",
+    "chatgpt",
+    "gemini",
+    "google-ai",
     "latex",
     "cli",
-    "automation"
+    "automation",
+    "job-search",
+    "cover-letter"
   ],
   "author": "Nour Nafea",
   "license": "MIT",

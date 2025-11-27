@@ -377,8 +377,23 @@ curl -X POST http://localhost:3000/api/send \
 Required in `.env` file:
 
 ```env
-# Claude API Key (get from console.anthropic.com)
-CLAUDE_API_KEY=sk-ant-api03-xxxxx
+# AI Provider (Choose ONE - Claude recommended)
+# Get Claude API key: https://console.anthropic.com/settings/keys
+CLAUDE_API_KEY=your_claude_api_key_here
+# Optional: Specify model (default: claude-sonnet-4-20250514)
+# CLAUDE_MODEL=claude-sonnet-4-20250514
+
+# OR use OpenAI (ChatGPT)
+# Get OpenAI API key: https://platform.openai.com/api-keys
+# OPENAI_API_KEY=your_openai_api_key_here
+# Optional: Specify model (default: gpt-4-turbo-preview)
+# OPENAI_MODEL=gpt-4-turbo-preview
+
+# OR use Google Gemini
+# Get Gemini API key: https://makersuite.google.com/app/apikey
+# GEMINI_API_KEY=your_gemini_api_key_here
+# Optional: Specify model (default: gemini-1.5-pro)
+# GEMINI_MODEL=gemini-1.5-pro
 
 # SMTP Email Configuration
 SMTP_EMAIL=your.email@gmail.com
@@ -431,10 +446,11 @@ SMTP_PASS=your_password
 
 ### CLI Issues
 
-**"CLAUDE_API_KEY not found"**
-- Ensure `.env` file exists in project root
-- Check `.env` contains `CLAUDE_API_KEY=...`
+**"No AI API key found"**
+- Ensure `.env` file exists in project root or `~/.autotailor/`
+- Check `.env` contains at least ONE of: `CLAUDE_API_KEY`, `OPENAI_API_KEY`, or `GEMINI_API_KEY`
 - Restart the CLI after adding the key
+- The CLI will show which AI provider it detects at startup
 
 **"SMTP credentials not found"**
 - Add `SMTP_EMAIL` and `SMTP_PASS` to `.env`
@@ -499,17 +515,26 @@ sudo apt install texlive-<package-name>
 - Check correct port in URL
 - Verify firewall settings
 
-### Claude API Issues
+### AI Provider Issues
 
 **"Rate limit exceeded"**
 - Wait a few minutes and retry
-- Check your API usage at console.anthropic.com
+- **Claude**: Check usage at [console.anthropic.com](https://console.anthropic.com)
+- **OpenAI**: Check usage at [platform.openai.com](https://platform.openai.com)
+- **Gemini**: Check quota at [makersuite.google.com](https://makersuite.google.com)
 - Consider upgrading your API plan
 
 **"Invalid API key"**
-- Verify key starts with `sk-ant-api03-`
+- **Claude**: Verify key starts with `sk-ant-api03-`
+- **OpenAI**: Verify key starts with `sk-`
+- **Gemini**: Verify key format is correct
 - Check no extra spaces in `.env`
 - Regenerate key if needed
+
+**Switching AI Providers**
+- Simply comment out one API key and uncomment another in `.env`
+- Only one API key should be active at a time
+- The CLI will automatically detect and use the available provider
 
 ---
 
