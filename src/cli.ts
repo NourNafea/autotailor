@@ -6,6 +6,7 @@ import ora from 'ora';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import dotenv from 'dotenv';
+import * as readline from 'readline';
 
 import { parseJobPost, JobPostAnalysis } from './agents/parseJobPost';
 import { tailorCV } from './agents/tailorCV';
@@ -55,19 +56,29 @@ interface CliAnswers {
 
 async function getMultilineInput(message: string): Promise<string> {
   console.log(chalk.yellow(`\n${message}`));
-  console.log(chalk.gray('(Paste your text and press Ctrl+D when done)\n'));
+  console.log(chalk.gray('(Paste your text and press Ctrl+D or type END on a new line when done)\n'));
 
   return new Promise((resolve) => {
-    let input = '';
-    process.stdin.setEncoding('utf8');
-    process.stdin.on('data', (chunk) => {
-      input += chunk;
+    let input: string[] = [];
+
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: false
     });
-    process.stdin.on('end', () => {
-      process.stdin.removeAllListeners();
-      resolve(input.trim());
+
+    rl.on('line', (line) => {
+      // Check if user typed END to finish
+      if (line.trim() === 'END') {
+        rl.close();
+        return;
+      }
+      input.push(line);
     });
-    process.stdin.resume();
+
+    rl.on('close', () => {
+      resolve(input.join('\n').trim());
+    });
   });
 }
 
