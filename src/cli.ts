@@ -56,27 +56,38 @@ interface CliAnswers {
 
 async function getMultilineInput(message: string): Promise<string> {
   console.log(chalk.yellow(`\n${message}`));
-  console.log(chalk.gray('(Paste your text and press Ctrl+D or type END on a new line when done)\n'));
+  console.log(chalk.gray('(Paste your text and press Enter twice when done)\n'));
 
   return new Promise((resolve) => {
     let input: string[] = [];
+    let emptyLineCount = 0;
 
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
-      terminal: false
+      prompt: ''
     });
 
     rl.on('line', (line) => {
-      // Check if user typed END to finish
-      if (line.trim() === 'END') {
-        rl.close();
-        return;
+      // Detect two consecutive empty lines as end signal
+      if (line.trim() === '') {
+        emptyLineCount++;
+        if (emptyLineCount >= 2) {
+          rl.close();
+          return;
+        }
+        input.push(line);
+      } else {
+        emptyLineCount = 0;
+        input.push(line);
       }
-      input.push(line);
     });
 
     rl.on('close', () => {
+      // Remove trailing empty lines
+      while (input.length > 0 && input[input.length - 1].trim() === '') {
+        input.pop();
+      }
       resolve(input.join('\n').trim());
     });
   });
