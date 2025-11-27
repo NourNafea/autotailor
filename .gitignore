@@ -22,3 +22,6 @@ uploads/*.pdf
 uploads/*.aux
 uploads/*.log
 uploads/*.out
+
+# Private marketing materials
+SHARE.md
