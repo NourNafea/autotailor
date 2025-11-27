@@ -1,4 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk';
+import { createAIProvider } from '../utils/aiProvider';
 import { JobPostAnalysis } from './parseJobPost';
 
 export interface EmailContent {
@@ -10,9 +10,7 @@ export async function generateEmail(
   jobAnalysis: JobPostAnalysis,
   applicantName: string
 ): Promise<EmailContent> {
-  const client = new Anthropic({
-    apiKey: process.env.CLAUDE_API_KEY,
-  });
+  const aiProvider = createAIProvider();
 
   const prompt = `You are an expert at writing professional job application emails. Write a concise, professional email for a job application.
 
@@ -38,18 +36,7 @@ Return your response as JSON:
 
 Keep the email concise - no more than 150 words total.`;
 
-  const message = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 1024,
-    messages: [
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ],
-  });
-
-  const responseText = message.content[0].type === 'text' ? message.content[0].text : '';
+  const responseText = await aiProvider.generateText(prompt);
 
   // Extract JSON from response
   const jsonMatch = responseText.match(/\{[\s\S]*\}/);

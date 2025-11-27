@@ -14,6 +14,7 @@ import { generateEmail } from './agents/generateEmail';
 import { compileLatexToPDF } from './services/latexCompiler';
 import { sendEmail } from './services/emailSender';
 import { extractEmail } from './utils/extractEmail';
+import { createAIProvider } from './utils/aiProvider';
 import os from 'os';
 
 // Load environment variables from multiple locations
@@ -97,23 +98,40 @@ async function main() {
   console.clear();
   console.log(BANNER);
 
-  // Check environment variables
-  if (!process.env.CLAUDE_API_KEY) {
-    console.log(chalk.red('\n✗ Error: CLAUDE_API_KEY not found\n'));
-    console.log(chalk.yellow('AutoTailor needs a Claude API key to work.\n'));
-    console.log(chalk.cyan('Setup Options:\n'));
-    console.log(chalk.white('1. Create .env in current directory:'));
-    console.log(chalk.gray('   echo "CLAUDE_API_KEY=your-key-here" > .env\n'));
-    console.log(chalk.white('2. Create .env in home directory:'));
-    console.log(chalk.gray(`   mkdir -p ${path.join(os.homedir(), '.autotailor')}`));
-    console.log(chalk.gray(`   echo "CLAUDE_API_KEY=your-key-here" > ${path.join(os.homedir(), '.autotailor', '.env')}\n`));
-    console.log(chalk.white('3. Get your API key from:'));
-    console.log(chalk.blue('   https://console.anthropic.com/settings/keys\n'));
+  // Check for AI API keys
+  const hasClaudeKey = !!process.env.CLAUDE_API_KEY;
+  const hasOpenAIKey = !!process.env.OPENAI_API_KEY;
+  const hasGeminiKey = !!process.env.GEMINI_API_KEY;
+
+  if (!hasClaudeKey && !hasOpenAIKey && !hasGeminiKey) {
+    console.log(chalk.red('\n✗ Error: No AI API key found\n'));
+    console.log(chalk.yellow('AutoTailor needs an AI API key to work.\n'));
+    console.log(chalk.cyan('Choose one of these AI providers:\n'));
+
+    console.log(chalk.white('1. Claude (Anthropic) - Recommended:'));
+    console.log(chalk.gray('   echo "CLAUDE_API_KEY=your-key-here" > .env'));
+    console.log(chalk.blue('   Get key: https://console.anthropic.com/settings/keys\n'));
+
+    console.log(chalk.white('2. ChatGPT (OpenAI):'));
+    console.log(chalk.gray('   echo "OPENAI_API_KEY=your-key-here" > .env'));
+    console.log(chalk.blue('   Get key: https://platform.openai.com/api-keys\n'));
+
+    console.log(chalk.white('3. Gemini (Google):'));
+    console.log(chalk.gray('   echo "GEMINI_API_KEY=your-key-here" > .env'));
+    console.log(chalk.blue('   Get key: https://makersuite.google.com/app/apikey\n'));
 
     if (envPath) {
-      console.log(chalk.gray(`Checked: ${envPath} (found but no CLAUDE_API_KEY)`));
+      console.log(chalk.gray(`Checked: ${envPath} (found but no AI API key)`));
     }
     process.exit(1);
+  }
+
+  // Display which AI provider is being used
+  try {
+    const aiProvider = createAIProvider();
+    console.log(chalk.gray(`\n🤖 Using: ${aiProvider.getProviderName()} (${aiProvider.getModelName()})\n`));
+  } catch (error) {
+    // Will be caught below
   }
 
   if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASS) {
