@@ -13,9 +13,30 @@ import { generateEmail } from './agents/generateEmail';
 import { compileLatexToPDF } from './services/latexCompiler';
 import { sendEmail } from './services/emailSender';
 import { extractEmail } from './utils/extractEmail';
+import os from 'os';
 
-// Load environment variables
-dotenv.config();
+// Load environment variables from multiple locations
+function loadEnvConfig() {
+  // Try current directory first
+  const currentDirEnv = path.join(process.cwd(), '.env');
+  if (fs.existsSync(currentDirEnv)) {
+    dotenv.config({ path: currentDirEnv });
+    return currentDirEnv;
+  }
+
+  // Try home directory config
+  const homeDirEnv = path.join(os.homedir(), '.autotailor', '.env');
+  if (fs.existsSync(homeDirEnv)) {
+    dotenv.config({ path: homeDirEnv });
+    return homeDirEnv;
+  }
+
+  // Try default dotenv config
+  dotenv.config();
+  return null;
+}
+
+const envPath = loadEnvConfig();
 
 const BANNER = `
 ╔═══════════════════════════════════════════════════════════╗
@@ -56,14 +77,37 @@ async function main() {
 
   // Check environment variables
   if (!process.env.CLAUDE_API_KEY) {
-    console.log(chalk.red('✗ Error: CLAUDE_API_KEY not found in .env file'));
-    console.log(chalk.yellow('Please create a .env file with your Claude API key'));
+    console.log(chalk.red('\n✗ Error: CLAUDE_API_KEY not found\n'));
+    console.log(chalk.yellow('AutoTailor needs a Claude API key to work.\n'));
+    console.log(chalk.cyan('Setup Options:\n'));
+    console.log(chalk.white('1. Create .env in current directory:'));
+    console.log(chalk.gray('   echo "CLAUDE_API_KEY=your-key-here" > .env\n'));
+    console.log(chalk.white('2. Create .env in home directory:'));
+    console.log(chalk.gray(`   mkdir -p ${path.join(os.homedir(), '.autotailor')}`));
+    console.log(chalk.gray(`   echo "CLAUDE_API_KEY=your-key-here" > ${path.join(os.homedir(), '.autotailor', '.env')}\n`));
+    console.log(chalk.white('3. Get your API key from:'));
+    console.log(chalk.blue('   https://console.anthropic.com/settings/keys\n'));
+
+    if (envPath) {
+      console.log(chalk.gray(`Checked: ${envPath} (found but no CLAUDE_API_KEY)`));
+    }
     process.exit(1);
   }
 
   if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASS) {
-    console.log(chalk.red('✗ Error: SMTP credentials not found in .env file'));
-    console.log(chalk.yellow('Please configure SMTP_EMAIL and SMTP_PASS in .env'));
+    console.log(chalk.red('\n✗ Error: SMTP credentials not found\n'));
+    console.log(chalk.yellow('AutoTailor needs email credentials to send applications.\n'));
+    console.log(chalk.cyan('Add to your .env file:\n'));
+    console.log(chalk.gray('SMTP_EMAIL=your.email@gmail.com'));
+    console.log(chalk.gray('SMTP_PASS=your_app_password'));
+    console.log(chalk.gray('SMTP_HOST=smtp.gmail.com'));
+    console.log(chalk.gray('SMTP_PORT=587\n'));
+    console.log(chalk.white('For Gmail App Password:'));
+    console.log(chalk.blue('https://myaccount.google.com/apppasswords\n'));
+
+    if (envPath) {
+      console.log(chalk.gray(`Config file: ${envPath}`));
+    }
     process.exit(1);
   }
 

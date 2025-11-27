@@ -122,7 +122,33 @@ SMTP_PORT=587
 
 ## 🎮 Usage
 
-### Interactive CLI (Recommended)
+### Option 1: Global Installation (Easiest)
+
+Install AutoTailor globally from npm:
+
+```bash
+# Install globally
+npm install -g autotailor
+
+# Create config directory
+mkdir -p ~/.autotailor
+
+# Create .env file
+cat > ~/.autotailor/.env << EOF
+CLAUDE_API_KEY=your-api-key-here
+SMTP_EMAIL=your.email@gmail.com
+SMTP_PASS=your_app_password
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+EOF
+
+# Run from anywhere
+autotailor
+```
+
+### Option 2: Local Development
+
+Clone and run locally:
 
 ```bash
 npm run tailor
