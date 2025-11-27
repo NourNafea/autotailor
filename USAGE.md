@@ -52,13 +52,13 @@ Paste the complete job posting:
 ```
 📋 Paste the job post below:
 Job Post:
-(Paste your text and press Ctrl+D when done)
+(Paste your text and press Enter twice when done)
 ```
 
 **How to paste:**
 - Copy the entire job post from LinkedIn/Indeed/etc.
 - Paste into terminal
-- Press **Ctrl+D** (Mac/Linux) or **Ctrl+Z + Enter** (Windows) to finish
+- Press **Enter twice** to finish (double-enter)
 
 **What gets extracted:**
 - Required skills and experience
@@ -445,10 +445,10 @@ SMTP_PASS=your_password
 - Ensure file has `.tex` extension
 - Try absolute path: `/full/path/to/CV.tex`
 
-**"Ctrl+D not working for job post"**
-- Windows: Use `Ctrl+Z` then press Enter
-- Mac/Linux: Use `Ctrl+D`
-- Alternative: Save job post to file, redirect input
+**"Job post input not finishing"**
+- Press **Enter twice** (double-enter) to finish pasting
+- Make sure you press Enter on an empty line twice in a row
+- This works on all platforms (Mac, Linux, Windows)
 
 ### LaTeX Compilation Issues
 

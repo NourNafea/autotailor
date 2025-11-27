@@ -222,7 +222,7 @@ $ npm run tailor
 ? Your full name: John Doe
 
 📋 Paste the job post below:
-[Paste job description, press Ctrl+D when done]
+[Paste job description, press Enter twice when done]
 
 ✓ Job post received
 ✓ Job post analyzed successfully

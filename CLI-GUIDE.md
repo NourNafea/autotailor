@@ -27,7 +27,7 @@ The CLI will walk you through these steps:
 
 ### 3. **Job Post**
    - Paste the entire job posting
-   - Press **Ctrl+D** (Mac/Linux) or **Ctrl+Z** (Windows) when done
+   - Press **Enter twice** (double-enter) when done
    - The AI will extract:
      - Required skills
      - Tools/technologies
@@ -71,10 +71,10 @@ The CLI will walk you through these steps:
 
 📋 Paste the job post below:
 Job Post:
-(Paste your text and press Ctrl+D when done)
+(Paste your text and press Enter twice when done)
 
 [Paste job description here]
-[Press Ctrl+D]
+[Press Enter twice]
 
 ✓ Job post received
 
