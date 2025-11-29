@@ -1,4 +1,4 @@
-import { createAIProvider } from '../utils/aiProvider';
+import { createAIProvider, AIProviderService } from '../utils/aiProvider';
 
 export interface JobPostAnalysis {
   requiredSkills: string[];
@@ -9,8 +9,10 @@ export interface JobPostAnalysis {
   email: string | null;
 }
 
-export async function parseJobPost(jobPostText: string): Promise<JobPostAnalysis> {
-  const aiProvider = createAIProvider();
+export async function parseJobPost(jobPostText: string, aiProvider?: AIProviderService): Promise<JobPostAnalysis> {
+  if (!aiProvider) {
+    aiProvider = createAIProvider();
+  }
 
   const prompt = `You are an expert job post analyzer. Analyze the following job posting and extract key information.
 

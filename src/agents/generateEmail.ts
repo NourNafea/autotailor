@@ -1,4 +1,4 @@
-import { createAIProvider } from '../utils/aiProvider';
+import { createAIProvider, AIProviderService } from '../utils/aiProvider';
 import { JobPostAnalysis } from './parseJobPost';
 
 export interface EmailContent {
@@ -8,9 +8,12 @@ export interface EmailContent {
 
 export async function generateEmail(
   jobAnalysis: JobPostAnalysis,
-  applicantName: string
+  applicantName: string,
+  aiProvider?: AIProviderService
 ): Promise<EmailContent> {
-  const aiProvider = createAIProvider();
+  if (!aiProvider) {
+    aiProvider = createAIProvider();
+  }
 
   const prompt = `You are an expert at writing professional job application emails. Write a concise, professional email for a job application.
 

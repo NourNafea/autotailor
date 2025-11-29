@@ -120,26 +120,107 @@ export class AIProviderService {
   }
 }
 
-export function createAIProvider(): AIProviderService {
-  // Determine which provider to use based on env vars
+export interface AvailableProvider {
+  provider: AIProvider;
+  apiKey: string;
+  name: string;
+}
+
+export function getAvailableProviders(): AvailableProvider[] {
+  const providers: AvailableProvider[] = [];
+
+  if (process.env.CLAUDE_API_KEY) {
+    providers.push({
+      provider: 'claude',
+      apiKey: process.env.CLAUDE_API_KEY,
+      name: 'Claude (Anthropic)'
+    });
+  }
+
+  if (process.env.OPENAI_API_KEY) {
+    providers.push({
+      provider: 'openai',
+      apiKey: process.env.OPENAI_API_KEY,
+      name: 'ChatGPT (OpenAI)'
+    });
+  }
+
+  if (process.env.GEMINI_API_KEY) {
+    providers.push({
+      provider: 'gemini',
+      apiKey: process.env.GEMINI_API_KEY,
+      name: 'Gemini (Google)'
+    });
+  }
+
+  return providers;
+}
+
+export function getModelOptions(provider: AIProvider): string[] {
+  switch (provider) {
+    case 'claude':
+      return [
+        'claude-sonnet-4-20250514',
+        'claude-opus-4-20250514',
+        'claude-3-5-sonnet-20241022'
+      ];
+    case 'openai':
+      return [
+        'gpt-4-turbo-preview',
+        'gpt-4o',
+        'gpt-4',
+        'gpt-3.5-turbo'
+      ];
+    case 'gemini':
+      return [
+        'gemini-1.5-pro',
+        'gemini-1.5-flash',
+        'gemini-pro'
+      ];
+    default:
+      return [];
+  }
+}
+
+export function createAIProvider(selectedProvider?: AIProvider, selectedModel?: string): AIProviderService {
+  // Determine which provider to use based on env vars or user selection
   let provider: AIProvider;
   let apiKey: string;
   let model: string | undefined;
 
-  if (process.env.CLAUDE_API_KEY) {
-    provider = 'claude';
-    apiKey = process.env.CLAUDE_API_KEY;
-    model = process.env.CLAUDE_MODEL;
-  } else if (process.env.OPENAI_API_KEY) {
-    provider = 'openai';
-    apiKey = process.env.OPENAI_API_KEY;
-    model = process.env.OPENAI_MODEL;
-  } else if (process.env.GEMINI_API_KEY) {
-    provider = 'gemini';
-    apiKey = process.env.GEMINI_API_KEY;
-    model = process.env.GEMINI_MODEL;
+  if (selectedProvider) {
+    // Use the selected provider
+    provider = selectedProvider;
+
+    if (provider === 'claude' && process.env.CLAUDE_API_KEY) {
+      apiKey = process.env.CLAUDE_API_KEY;
+      model = selectedModel || process.env.CLAUDE_MODEL;
+    } else if (provider === 'openai' && process.env.OPENAI_API_KEY) {
+      apiKey = process.env.OPENAI_API_KEY;
+      model = selectedModel || process.env.OPENAI_MODEL;
+    } else if (provider === 'gemini' && process.env.GEMINI_API_KEY) {
+      apiKey = process.env.GEMINI_API_KEY;
+      model = selectedModel || process.env.GEMINI_MODEL;
+    } else {
+      throw new Error(`No API key found for ${provider}`);
+    }
   } else {
-    throw new Error('No AI API key found. Please set CLAUDE_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY');
+    // Auto-detect provider (original behavior)
+    if (process.env.CLAUDE_API_KEY) {
+      provider = 'claude';
+      apiKey = process.env.CLAUDE_API_KEY;
+      model = process.env.CLAUDE_MODEL;
+    } else if (process.env.OPENAI_API_KEY) {
+      provider = 'openai';
+      apiKey = process.env.OPENAI_API_KEY;
+      model = process.env.OPENAI_MODEL;
+    } else if (process.env.GEMINI_API_KEY) {
+      provider = 'gemini';
+      apiKey = process.env.GEMINI_API_KEY;
+      model = process.env.GEMINI_MODEL;
+    } else {
+      throw new Error('No AI API key found. Please set CLAUDE_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY');
+    }
   }
 
   return new AIProviderService({ provider, apiKey, model });

@@ -1,11 +1,14 @@
-import { createAIProvider } from '../utils/aiProvider';
+import { createAIProvider, AIProviderService } from '../utils/aiProvider';
 import { JobPostAnalysis } from './parseJobPost';
 
 export async function tailorCV(
   originalCV: string,
-  jobAnalysis: JobPostAnalysis
+  jobAnalysis: JobPostAnalysis,
+  aiProvider?: AIProviderService
 ): Promise<string> {
-  const aiProvider = createAIProvider();
+  if (!aiProvider) {
+    aiProvider = createAIProvider();
+  }
 
   const prompt = `You are an expert LaTeX CV optimizer. Your task is to tailor a CV to match a specific job posting while preserving LaTeX formatting.
 

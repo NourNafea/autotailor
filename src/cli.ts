@@ -14,7 +14,7 @@ import { generateEmail } from './agents/generateEmail';
 import { compileLatexToPDF } from './services/latexCompiler';
 import { sendEmail } from './services/emailSender';
 import { extractEmail } from './utils/extractEmail';
-import { createAIProvider } from './utils/aiProvider';
+import { createAIProvider, getAvailableProviders, getModelOptions, AIProvider } from './utils/aiProvider';
 import os from 'os';
 
 // Load environment variables from multiple locations
@@ -98,12 +98,10 @@ async function main() {
   console.clear();
   console.log(BANNER);
 
-  // Check for AI API keys
-  const hasClaudeKey = !!process.env.CLAUDE_API_KEY;
-  const hasOpenAIKey = !!process.env.OPENAI_API_KEY;
-  const hasGeminiKey = !!process.env.GEMINI_API_KEY;
+  // Get available AI providers
+  const availableProviders = getAvailableProviders();
 
-  if (!hasClaudeKey && !hasOpenAIKey && !hasGeminiKey) {
+  if (availableProviders.length === 0) {
     console.log(chalk.red('\n✗ Error: No AI API key found\n'));
     console.log(chalk.yellow('AutoTailor needs an AI API key to work.\n'));
     console.log(chalk.cyan('Choose one of these AI providers:\n'));
@@ -126,13 +124,42 @@ async function main() {
     process.exit(1);
   }
 
-  // Display which AI provider is being used
-  try {
-    const aiProvider = createAIProvider();
-    console.log(chalk.gray(`\n🤖 Using: ${aiProvider.getProviderName()} (${aiProvider.getModelName()})\n`));
-  } catch (error) {
-    // Will be caught below
+  // Let user choose AI provider and model
+  let selectedProvider: AIProvider;
+  let selectedModel: string;
+
+  if (availableProviders.length > 1) {
+    // Multiple providers available - let user choose
+    const { chosenProvider } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'chosenProvider',
+        message: '🤖 Choose your AI provider:',
+        choices: availableProviders.map(p => ({ name: p.name, value: p.provider }))
+      }
+    ]);
+    selectedProvider = chosenProvider;
+  } else {
+    // Only one provider available - use it
+    selectedProvider = availableProviders[0].provider;
   }
+
+  // Let user choose model
+  const modelOptions = getModelOptions(selectedProvider);
+  const { chosenModel } = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'chosenModel',
+      message: '🎯 Choose your AI model:',
+      choices: modelOptions,
+      default: modelOptions[0]
+    }
+  ]);
+  selectedModel = chosenModel;
+
+  // Create AI provider with user selections
+  const aiProvider = createAIProvider(selectedProvider, selectedModel);
+  console.log(chalk.gray(`\n✓ Using: ${aiProvider.getProviderName()} (${aiProvider.getModelName()})\n`));
 
   if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASS) {
     console.log(chalk.red('\n✗ Error: SMTP credentials not found\n'));
@@ -197,7 +224,7 @@ async function main() {
     const spinner1 = ora('Analyzing job post with AI...').start();
     let jobAnalysis: JobPostAnalysis;
     try {
-      jobAnalysis = await parseJobPost(jobPost);
+      jobAnalysis = await parseJobPost(jobPost, aiProvider);
       spinner1.succeed('Job post analyzed successfully');
     } catch (error) {
       spinner1.fail('Failed to analyze job post');
@@ -243,7 +270,7 @@ async function main() {
     const spinner3 = ora('Tailoring CV with AI (this may take a moment)...').start();
     let tailoredCVContent: string;
     try {
-      tailoredCVContent = await tailorCV(originalCV, jobAnalysis);
+      tailoredCVContent = await tailorCV(originalCV, jobAnalysis, aiProvider);
       spinner3.succeed('CV tailored successfully');
     } catch (error) {
       spinner3.fail('Failed to tailor CV');
@@ -273,7 +300,7 @@ async function main() {
     const spinner6 = ora('Generating application email...').start();
     let emailContent;
     try {
-      emailContent = await generateEmail(jobAnalysis, applicantName);
+      emailContent = await generateEmail(jobAnalysis, applicantName, aiProvider);
       spinner6.succeed('Email generated');
     } catch (error) {
       spinner6.fail('Failed to generate email');
