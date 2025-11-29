@@ -132,7 +132,7 @@ async function main() {
     // Multiple providers available - let user choose
     const { chosenProvider } = await inquirer.prompt([
       {
-        type: 'list',
+        type: 'rawlist',
         name: 'chosenProvider',
         message: '🤖 Choose your AI provider:',
         choices: availableProviders.map(p => ({ name: p.name, value: p.provider }))
@@ -148,7 +148,7 @@ async function main() {
   const modelOptions = getModelOptions(selectedProvider);
   const { chosenModel } = await inquirer.prompt([
     {
-      type: 'list',
+      type: 'rawlist',
       name: 'chosenModel',
       message: '🎯 Choose your AI model:',
       choices: modelOptions
