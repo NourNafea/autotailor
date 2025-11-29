@@ -156,26 +156,31 @@ export function getAvailableProviders(): AvailableProvider[] {
   return providers;
 }
 
-export function getModelOptions(provider: AIProvider): string[] {
+export interface ModelOption {
+  name: string;
+  value: string;
+}
+
+export function getModelOptions(provider: AIProvider): ModelOption[] {
   switch (provider) {
     case 'claude':
       return [
-        'claude-sonnet-4-20250514',
-        'claude-opus-4-20250514',
-        'claude-3-5-sonnet-20241022'
+        { name: 'Claude Sonnet 4 (Recommended) - Balanced performance', value: 'claude-sonnet-4-20250514' },
+        { name: 'Claude Opus 4 - Most capable, slower', value: 'claude-opus-4-20250514' },
+        { name: 'Claude 3.5 Sonnet - Fast and efficient', value: 'claude-3-5-sonnet-20241022' }
       ];
     case 'openai':
       return [
-        'gpt-4-turbo-preview',
-        'gpt-4o',
-        'gpt-4',
-        'gpt-3.5-turbo'
+        { name: 'GPT-4 Turbo (Recommended) - Best balance', value: 'gpt-4-turbo-preview' },
+        { name: 'GPT-4o - Optimized and fast', value: 'gpt-4o' },
+        { name: 'GPT-4 - Most capable', value: 'gpt-4' },
+        { name: 'GPT-3.5 Turbo - Fastest and cheapest', value: 'gpt-3.5-turbo' }
       ];
     case 'gemini':
       return [
-        'gemini-1.5-pro',
-        'gemini-1.5-flash',
-        'gemini-pro'
+        { name: 'Gemini 1.5 Pro (Recommended) - Most capable', value: 'gemini-1.5-pro' },
+        { name: 'Gemini 1.5 Flash - Faster responses', value: 'gemini-1.5-flash' },
+        { name: 'Gemini Pro - Standard model', value: 'gemini-pro' }
       ];
     default:
       return [];

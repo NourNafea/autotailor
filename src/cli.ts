@@ -151,8 +151,7 @@ async function main() {
       type: 'list',
       name: 'chosenModel',
       message: '🎯 Choose your AI model:',
-      choices: modelOptions,
-      default: modelOptions[0]
+      choices: modelOptions
     }
   ]);
   selectedModel = chosenModel;
