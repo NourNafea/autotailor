@@ -1,6 +1,6 @@
 {
   "name": "autotailor",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "AI-powered automated CV tailoring and job application system. Supports Claude, ChatGPT, and Gemini.",
   "main": "dist/index.js",
   "bin": {
