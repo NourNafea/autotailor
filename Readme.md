@@ -43,6 +43,7 @@ That's it! The CLI guides you through the entire process.
 
 ### 🎨 User Experience
 - **Interactive CLI** - Beautiful, step-by-step command-line interface
+- **AI Model Selection** - Choose your preferred AI provider and model at runtime
 - **Real-time Progress** - See what's happening with spinners and colored output
 - **Email Preview** - Review everything before sending
 - **Confirmation Required** - No accidental sends
@@ -137,6 +138,55 @@ SMTP_PORT=587
 
 ---
 
+## 🤖 AI Model Selection
+
+**New in v1.2.0:** Choose your AI provider and model interactively!
+
+When you run AutoTailor, you'll be prompted to select:
+
+### If you have multiple API keys configured:
+```
+? 🤖 Choose your AI provider:
+  1) Claude (Anthropic)
+  2) ChatGPT (OpenAI)
+  3) Gemini (Google)
+  Answer:
+```
+
+### Then choose your model:
+
+**For Claude:**
+```
+? 🎯 Choose your AI model:
+  1) Claude Sonnet 4 (Recommended) - Balanced performance
+  2) Claude Opus 4 - Most capable, slower
+  3) Claude 3.5 Sonnet - Fast and efficient
+  Answer: 1
+```
+
+**For OpenAI:**
+```
+? 🎯 Choose your AI model:
+  1) GPT-4 Turbo (Recommended) - Best balance
+  2) GPT-4o - Optimized and fast
+  3) GPT-4 - Most capable
+  4) GPT-3.5 Turbo - Fastest and cheapest
+  Answer: 1
+```
+
+**For Gemini:**
+```
+? 🎯 Choose your AI model:
+  1) Gemini 1.5 Pro (Recommended) - Most capable
+  2) Gemini 1.5 Flash - Faster responses
+  3) Gemini Pro - Standard model
+  Answer: 1
+```
+
+**Note:** If you only have one API key configured, it will skip provider selection and go straight to model selection.
+
+---
+
 ## 🎮 Usage
 
 ### Option 1: Global Installation (Easiest)
@@ -176,16 +226,18 @@ npm run tailor
 ```
 
 The CLI will:
-1. ✅ Ask for your CV file path
-2. ✅ Ask for your name
-3. ✅ Let you paste the job post
-4. ✅ Analyze the job with AI
-5. ✅ Tailor your CV automatically
-6. ✅ Compile to PDF
-7. ✅ Generate professional email
-8. ✅ Show preview of everything
-9. ✅ Ask for confirmation
-10. ✅ Send the application
+1. ✅ Let you choose AI provider (if multiple configured)
+2. ✅ Let you choose AI model
+3. ✅ Ask for your CV file path
+4. ✅ Ask for your name
+5. ✅ Let you paste the job post
+6. ✅ Analyze the job with AI
+7. ✅ Tailor your CV automatically
+8. ✅ Compile to PDF
+9. ✅ Generate professional email
+10. ✅ Show preview of everything
+11. ✅ Ask for confirmation
+12. ✅ Send the application
 
 **See [CLI-GUIDE.md](./CLI-GUIDE.md) for detailed CLI documentation.**
 
@@ -239,7 +291,13 @@ $ npm run tailor
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
 
-🤖 Using: Claude (Anthropic) (claude-sonnet-4-20250514)
+? 🎯 Choose your AI model:
+  1) Claude Sonnet 4 (Recommended) - Balanced performance
+  2) Claude Opus 4 - Most capable, slower
+  3) Claude 3.5 Sonnet - Fast and efficient
+  Answer: 1
+
+✓ Using: Claude (Anthropic) (claude-sonnet-4-20250514)
 
 ? Enter path to your CV (.tex file): ./uploads/CV.tex
 ? Your full name: John Doe
